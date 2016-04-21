@@ -7,9 +7,14 @@
 //
 
 #import "AppDelegate.h"
-
+#import "SecViewController.h"
+#import "FLSideSlipViewController.h"
+#import "TirViewController.h"
+#import "rightViewController.h"
+#import "centerViewController.h"
+#import "ViewController.h"
 @interface AppDelegate ()
-
+@property(nonatomic,strong)FLSideSlipViewController *slipVC;
 @end
 
 @implementation AppDelegate
@@ -17,6 +22,23 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
+    self.window=[[UIWindow alloc]initWithFrame:[UIScreen mainScreen].bounds];
+    self.window.backgroundColor=[UIColor whiteColor];
+    //中间控制器
+    TirViewController   *sec=[[TirViewController alloc]init];
+    
+    UINavigationController *nav=[[UINavigationController alloc]initWithRootViewController:sec];
+    
+    _slipVC=[[FLSideSlipViewController alloc]initWithRootViewController:nav];
+    
+    _slipVC.canSlideInPush=NO;
+    
+    TirViewController *tvc=[[TirViewController alloc]init];
+    rightViewController *rvc=[[rightViewController alloc]init];
+    _slipVC.leftViewController=tvc;
+    _slipVC.rightViewController=rvc;
+    self.window.rootViewController=_slipVC;
+    [self.window makeKeyAndVisible];
     return YES;
 }
 
@@ -36,6 +58,12 @@
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+    
+    NSString *str=[UIPasteboard generalPasteboard].string;
+    if (str) {
+        UIAlertView  *alert = [[UIAlertView alloc] initWithTitle:@"淘宝分享" message:str delegate:nil cancelButtonTitle:@"取消" otherButtonTitles:@"确定 ", nil];
+        [alert show];
+    }
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {
